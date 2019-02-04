@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 
 # SUBMODULE LOADER - Because I can't get git submodule to work properly
 # The file location is relative to the repo root
