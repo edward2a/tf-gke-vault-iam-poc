@@ -1,0 +1,1 @@
+modules/gcp/gke https://github.com/terraform-google-modules/terraform-google-kubernetes-engine.git v0.4.0
