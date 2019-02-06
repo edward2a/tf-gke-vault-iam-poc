@@ -45,6 +45,7 @@ module gitlab {
   project     = "${var.google_default_project}"
   prefix      = "gl-poc"
 
+  ssh_key     = "./ssh_key/id_rsa"
   data_volume = "gitlab-poc-data"
   config_file = ""
   dns_name    = ""
