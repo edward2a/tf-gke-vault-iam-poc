@@ -15,10 +15,6 @@ resource google_kms_crypto_key vault_poc {
 module vault {
   source = "./modules/gcp/vault"
 
-  providers = {
-    google  = "google-beta"
-  }
-
   project_id        = "${var.google_default_project}"
   storage_bucket    = ""
   region            = "${var.google_default_region}"
@@ -28,10 +24,6 @@ module vault {
 
 module gke {
   source = "./modules/gcp/gke"
-
-  providers = {
-    google  = "google-beta"
-  }
 
   project_id          = "${var.google_default_project}"
   name                = "kube-poc"
@@ -49,10 +41,6 @@ module gke {
 
 module gitlab {
   source = "./modules/gcp/gitlab"
-
-  providers = {
-    google  = "google-beta"
-  }
 
   project     = "${var.google_default_project}"
   prefix      = "gl-poc"
