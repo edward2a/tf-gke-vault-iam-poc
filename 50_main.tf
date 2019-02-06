@@ -28,8 +28,6 @@ module gke {
   project_id          = "${var.google_default_project}"
   name                = "kube-poc"
   region              = "${var.google_default_region}"
-  regional            = "false"
-  zones               = ["${var.google_default_zone}"]
 
   network             = "${google_compute_network.kubault_poc.self_link}"
   subnetwork          = "${google_compute_subnetwork.kubault_poc_1.self_link}"
