@@ -14,22 +14,21 @@ resource google_kms_crypto_key vault_poc {
   rotation_period = "100000s"
 }
 
-# vault bucket
-resource google_storage_bucket vault_poc {
-  name          = "vault-poc"
-  storage_class = "REGIONAL"
-  location      = "${var.google_default_region}"
-  force_destroy = "true"
-}
-
 module vault {
   source = "./modules/gcp/vault"
 
   project_id        = "${var.google_default_project}"
-  storage_bucket    = "${google_storage_bucket.vault_poc.name}"
   region            = "${var.google_default_region}"
   zone              = "${var.google_default_zone}"
+  network           = "${google_compute_network.kubault_poc.self_link}"
+  subnetwork        = "${google_compute_subnetwork.kubault_poc_1.self_link}"
   kms_keyring_name  = "${google_kms_key_ring.vault_poc.name}"
+
+  storage_bucket    = "vault-poc"
+  force_destroy_bucket = "true"
+
+  vault_version     = "1.0.2"
+
 }
 
 #### GKE ####
@@ -41,12 +40,10 @@ module gke {
   name                = "kube-poc"
   region              = "${var.google_default_region}"
 
-  network             = "${google_compute_network.kubault_poc.self_link}"
-  subnetwork          = "${google_compute_subnetwork.kubault_poc_1.self_link}"
-  ip_range_pods       = "kubault-poc-1"
-  ip_range_services   = "kubault-poc-1"
-  // ip_range_pods       = "${google_compute_subnetwork.kubault_poc_1.secondary_ip_range.ip_cidr_range}"
-  // ip_range_services   = "${google_compute_subnetwork.kubault_poc_1.secondary_ip_range.ip_cidr_range}"
+  network             = "${google_compute_network.kubault_poc.name}"
+  subnetwork          = "${google_compute_subnetwork.kubault_poc_1.name}"
+  ip_range_pods       = "${google_compute_subnetwork.kubault_poc_1.secondary_ip_range.range_name}"
+  ip_range_services   = "${google_compute_subnetwork.kubault_poc_1.secondary_ip_range.range_name}"
 }
 
 #### GITLAB ####
@@ -58,6 +55,7 @@ module gitlab {
   prefix      = "gl-poc"
 
   network     = "${google_compute_network.kubault_poc.self_link}"
+  subnetwork  = "${google_compute_subnetwork.kubault_poc_1.self_link}"
   zone        = "${var.google_default_zone}"
 
   ssh_key     = "./ssh_key/id_rsa"
