@@ -14,11 +14,19 @@ resource google_kms_crypto_key vault_poc {
   rotation_period = "100000s"
 }
 
+# vault bucket
+resource google_storage_bucket vault_poc {
+  name          = "vault-poc"
+  storage_class = "REGIONAL"
+  location      = "${var.google_default_region}"
+  force_destroy = "true"
+}
+
 module vault {
   source = "./modules/gcp/vault"
 
   project_id        = "${var.google_default_project}"
-  storage_bucket    = ""
+  storage_bucket    = "${google_storage_bucket.vault_poc.name}"
   region            = "${var.google_default_region}"
   zone              = "${var.google_default_zone}"
   kms_keyring_name  = "${google_kms_key_ring.vault_poc.name}"
@@ -41,15 +49,7 @@ module gke {
   // ip_range_services   = "${google_compute_subnetwork.kubault_poc_1.secondary_ip_range.ip_cidr_range}"
 }
 
-
 #### GITLAB ####
-resource random_string gl_runner_token {
-  length = 32
-}
-
-resrouce random_string gl_initial_root_password {
-  length = 32
-}
 
 module gitlab {
   source = "./modules/gcp/gitlab"
@@ -57,11 +57,12 @@ module gitlab {
   project     = "${var.google_default_project}"
   prefix      = "gl-poc"
 
+  network     = "${google_compute_network.kubault_poc.self_link}"
+  zone        = "${var.google_default_zone}"
+
   ssh_key     = "./ssh_key/id_rsa"
   data_volume = "gitlab-poc-data"
   config_file = ""
-  dns_name    = ""
-
-  runner_token = "${random_string.gl_runner_token.result}"
-  initial_root_password = "${random_string.gl_initial_root_password.result}"
+  dns_name    = "gitlab"
+  dns_zone    = "no_dns"
 }
