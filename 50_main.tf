@@ -42,12 +42,31 @@ module gke {
 
   project_id          = "${var.google_default_project}"
   name                = "kube-poc"
+  regional            = "false"
   region              = "${var.google_default_region}"
+  zones               = ["${var.google_default_zone}"]
 
   network             = "${google_compute_network.kubault_poc.name}"
   subnetwork          = "${google_compute_subnetwork.kubault_poc_1.name}"
   ip_range_pods       = "${google_compute_subnetwork.kubault_poc_1.secondary_ip_range.0.range_name}"
   ip_range_services   = "${google_compute_subnetwork.kubault_poc_1.secondary_ip_range.0.range_name}"
+
+  node_pools = [
+    {
+      name               = "default-node-pool"
+      machine_type       = "n1-standard-1"
+      min_count          = 1
+      max_count          = 1
+      disk_size_gb       = 30
+      disk_type          = "pd-standard"
+      image_type         = "COS"
+      auto_repair        = true
+      auto_upgrade       = true
+      //service_account    = "project-service-account@<PROJECT ID>.iam.gserviceaccount.com"
+      preemptible        = false
+      initial_node_count = 1
+    }
+  ]
 }
 
 #### GITLAB ####
