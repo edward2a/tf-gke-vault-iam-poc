@@ -22,6 +22,6 @@ fi
 
 while read RPATH REPO BRANCH; do
     if [ -d ${RPATH} ]; then rm -rf ${RPATH}; fi
-    git clone --depth=1 --branch ${BRANCH} ${REPO} ${RPATH}
+    git clone --depth=1 --branch ${BRANCH} ${REPO} ${RPATH} || { echo "ERROR: Failed cloning ${REPO}"; exit 1; }
 done<${MODULES_FILE}
 
