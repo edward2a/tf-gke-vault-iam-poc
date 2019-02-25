@@ -13,3 +13,6 @@ modules/
 
 # ssh keys
 ssh_key/*
+
+# vim
+*.swp
