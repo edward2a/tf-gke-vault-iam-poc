@@ -35,6 +35,5 @@ fi
 
 
 # Output for tf
-jq -ncM --arg root_token "${ROOT_TOKEN}" '{"root_token":$root_token}' > output.log
 jq -ncM --arg root_token "${ROOT_TOKEN}" '{"root_token":$root_token}'
 
