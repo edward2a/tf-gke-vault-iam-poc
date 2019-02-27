@@ -1,7 +1,7 @@
 resource null_resource vault_init_wait {
   depends_on = ["module.vault"]
   provisioner "local-exec" {
-    command = "sleep 45s"
+    command = "sleep 90s"
   }
 }
 
