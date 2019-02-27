@@ -52,6 +52,8 @@ module gke {
   ip_range_pods       = "${google_compute_subnetwork.kubault_poc_1.secondary_ip_range.0.range_name}"
   ip_range_services   = "${google_compute_subnetwork.kubault_poc_1.secondary_ip_range.0.range_name}"
 
+  kubernetes_version  = "1.11.7-gke.6"
+
   node_pools = [
     {
       name               = "default-node-pool"
