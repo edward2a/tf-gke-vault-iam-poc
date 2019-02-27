@@ -27,6 +27,7 @@ module vault {
   network           = "${google_compute_network.kubault_poc.name}"
   subnetwork        = "${google_compute_subnetwork.kubault_poc_1.name}"
   kms_keyring_name  = "${google_kms_key_ring.vault_poc.name}"
+  kms_key_name      = "${google_kms_crypto_key.vault_poc.name}"
 
   storage_bucket    = "vault-poc-${random_id.vault_key_name_suffix.hex}"
   force_destroy_bucket = "true"
