@@ -15,3 +15,13 @@ resource google_compute_subnetwork kubault_poc_1 {
   }]
   private_ip_google_access = "true"
 }
+
+resource google_compute_firewall http_inbound {
+  name    = "https-inbound"
+  network = "${google_compute_network.kubault_poc.self_link}"
+
+  allow {
+    protocol  = "tcp"
+    ports     = ["80", "443"]
+  }
+}
