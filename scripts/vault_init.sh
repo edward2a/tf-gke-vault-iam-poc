@@ -16,7 +16,7 @@ VAULT_ADDR=${VAULT_ADDR:-http://127.0.0.1:8200}
 
 # Extract items as required
 UNSEAL_KEYS=($(grep -Po '(Unseal Key [1-5]: ).*? ' <<<${DATA} | awk '{ print $4 }'))
-ROOT_TOKEN=$(grep -Po '(Root Token: ).*? ' <<<${DATA} | awk '{ print $4 }')
+ROOT_TOKEN=$(grep -Po '(Root Token: ).*? ' <<<${DATA} | awk '{ print $3 }')
 
 
 # Get seal status
@@ -27,7 +27,7 @@ SEAL_STATUS="$(curl -skf https://${VAULT_ADDR}/v1/sys/seal-status | jq -r .seale
 # Unseal if required
 if ${SEAL_STATUS}; then
     for UNSEAL_KEY in ${UNSEAL_KEYS[*]}; do
-        curl -X POST -skf --connect-timeout 5 --data "{\"key\":\"${UNSEAL_KEY}\"}" https://${VAULT_ADDR}/v1/sys/unseal
+        curl -X POST -skf --connect-timeout 5 -o /dev/null --data "{\"key\":\"${UNSEAL_KEY}\"}" https://${VAULT_ADDR}/v1/sys/unseal
         ret=${?}
         ((${ret} == 0)) || { echo "ERROR: curl exit ${ret}" 1>&2; exit ${ret}; }
     done
@@ -37,3 +37,4 @@ fi
 # Output for tf
 jq -ncM --arg root_token "${ROOT_TOKEN}" '{"root_token":$root_token}' > output.log
 jq -ncM --arg root_token "${ROOT_TOKEN}" '{"root_token":$root_token}'
+
