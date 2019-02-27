@@ -1,5 +1,5 @@
 provider "google-beta" {
-  version     = "~> 1.20.0"
+  version     = "~> 2.1.0"
   credentials = "${var.google_credentials}"
   project     = "${var.google_default_project}"
   region      = "${var.google_default_region}"
@@ -7,7 +7,7 @@ provider "google-beta" {
 }
 
 provider "google" {
-  version     = "~> 1.20.0"
+  version     = "~> 2.1.0"
   credentials = "${var.google_credentials}"
   project     = "${var.google_default_project}"
   region      = "${var.google_default_region}"
