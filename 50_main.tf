@@ -57,7 +57,7 @@ module gke {
   node_pools = [
     {
       name               = "default-node-pool"
-      machine_type       = "n1-standard-1"
+      machine_type       = "g1-small"
       min_count          = 1
       max_count          = 1
       disk_size_gb       = 30
@@ -65,13 +65,13 @@ module gke {
       image_type         = "COS"
       auto_repair        = true
       auto_upgrade       = true
-      //service_account    = "project-service-account@<PROJECT ID>.iam.gserviceaccount.com"
+      #service_account    = "project-service-account@<PROJECT ID>.iam.gserviceaccount.com"
       preemptible        = false
       initial_node_count = 1
     }
   ]
 }
-
+/*
 #### GITLAB ####
 
 resource google_compute_disk gitlab_data {
@@ -99,4 +99,4 @@ module gitlab {
   dns_zone    = "no_dns"
 
   runner_count = 0
-}
+}*/
