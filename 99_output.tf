@@ -22,3 +22,8 @@ output kubernetes_vault_sa_jwt {
   value = "${data.kubernetes_secret.vault_sa.data.token}"
 }
 
+
+output kubernetes_host {
+  value = "${data.google_container_cluster.gke.endpoint}"
+}
+

@@ -25,7 +25,6 @@ resource kubernetes_service_account vault {
   }
 }
 
-/*
 # Vault SA data for export
 data kubernetes_secret vault_sa {
   metadata = {
@@ -33,7 +32,6 @@ data kubernetes_secret vault_sa {
     namespace = "default"
   }
 }
-*/
 
 # Vault cluster role binding
 resource kubernetes_cluster_role_binding vault {
@@ -133,7 +131,7 @@ resource kubernetes_role_binding mgr_app_1 {
     namespace = "${kubernetes_namespace.sample_app_1.id}"
   }
   role_ref {
-    api_group = ""
+    api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
     name      = "mgr-app-1"
   }
@@ -151,7 +149,7 @@ resource kubernetes_role_binding mgr_app_2 {
     namespace = "${kubernetes_namespace.sample_app_2.id}"
   }
   role_ref {
-    api_group = ""
+    api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
     name      = "mgr-app-2"
   }
