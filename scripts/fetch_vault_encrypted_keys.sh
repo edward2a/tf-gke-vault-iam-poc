@@ -7,7 +7,7 @@ eval $(jq -r '@sh "SIGNED_URL=\(.signed_url)"')
 
 while true; do
 
-    ENCRYPTED_DATA="$(curl -sf "${SIGNED_URL}" 2>>crypt_data.log | base64 -w0)"
+    ENCRYPTED_DATA="$(curl -sf "${SIGNED_URL}" 2>crypt_curl.log | base64 -w0)"
 
     if (( ${#ENCRYPTED_DATA} > 0 )); then
         break
