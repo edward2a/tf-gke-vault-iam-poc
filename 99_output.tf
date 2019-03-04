@@ -10,3 +10,15 @@ output vault_root_token {
 output google_project_id {
   value = "${var.google_default_project}"
 }
+
+
+output kubernetes_vault_sa_ca_cert {
+  sensitive = true
+  value = "${data.kubernetes_secret.vault_sa.data.ca.crt}"
+}
+
+output kubernetes_vault_sa_jwt {
+  sensitive  = true
+  value = "${data.kubernetes_secret.vault_sa.data.token}"
+}
+
