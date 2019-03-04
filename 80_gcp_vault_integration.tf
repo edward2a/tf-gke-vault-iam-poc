@@ -19,20 +19,30 @@ data google_compute_instance vault_instances {
 }
 
 data google_storage_object_signed_url vault_init_data {
-  bucket    = "vault-poc-${random_id.vault_key_name_suffix.hex}-assets"
-  path      = "vault_unseal_keys.txt.encrypted"
-  duration  = "300s"
+  depends_on  = ["module.vault", "null_resource.vault_init_wait"]
+  bucket      = "vault-poc-${random_id.vault_key_name_suffix.hex}-assets"
+  path        = "vault_unseal_keys.txt.encrypted"
+  duration    = "300s"
 }
 
 data external vault_init_data {
-  program = ["bash", "${path.module}/scripts/fetch_vault_encrypted_keys.sh"]
-  query = {
+  depends_on  = ["module.vault", "null_resource.vault_init_wait", "data.google_storage_object_signed_url.vault_init_data"]
+  program     = ["bash", "${path.module}/scripts/fetch_vault_encrypted_keys.sh"]
+  query       = {
     signed_url = "${data.google_storage_object_signed_url.vault_init_data.signed_url}"
   }
 }
 
+# Declaring a data source for the key because for some reason using the actual
+# resource gives an error which is magically fixed on retry (bug?)
+data google_kms_crypto_key vault_poc {
+  depends_on = ["null_resource.vault_init_wait"]
+  name      = "vault-poc-${random_id.vault_key_name_suffix.hex}"
+  key_ring  = "${google_kms_key_ring.vault_poc.self_link}"
+}
+
 data google_kms_secret vault_init_data {
-  crypto_key = "${google_kms_crypto_key.vault_poc.id}"
+  crypto_key = "${data.google_kms_crypto_key.vault_poc.self_link}"
   ciphertext = "${data.external.vault_init_data.result["encrypted_data"]}"
 }
 
@@ -44,3 +54,4 @@ data external vault_root {
     key_data        = "${data.google_kms_secret.vault_init_data.plaintext}"
   }
 }
+
