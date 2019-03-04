@@ -47,8 +47,9 @@ module gke {
   region              = "${var.google_default_region}"
   zones               = ["${var.google_default_zone}"]
 
-  network             = "${google_compute_network.kubault_poc.name}"
-  subnetwork          = "${google_compute_subnetwork.kubault_poc_1.name}"
+  # need to replace _sl for relative URL path to avoid drift between tf config and gke stored config
+  network_sl          = "${google_compute_network.kubault_poc.name}"
+  subnetwork_sl       = "${google_compute_subnetwork.kubault_poc_1.name}"
   ip_range_pods       = "${google_compute_subnetwork.kubault_poc_1.secondary_ip_range.0.range_name}"
   ip_range_services   = "${google_compute_subnetwork.kubault_poc_1.secondary_ip_range.0.range_name}"
 
