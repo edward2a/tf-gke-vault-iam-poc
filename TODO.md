@@ -1,0 +1,1 @@
+- Do not use outputs but data sources where possible
