@@ -27,7 +27,6 @@ resource google_compute_firewall http_inbound {
   }
 }
 
-/*
 resource google_compute_firewall ssh_inbound {
   name    = "ssh-inbound"
   network = "${google_compute_network.kubault_poc.self_link}"
@@ -38,4 +37,3 @@ resource google_compute_firewall ssh_inbound {
     ports         = ["22"]
   }
 }
-*/
