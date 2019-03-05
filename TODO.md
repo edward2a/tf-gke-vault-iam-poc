@@ -1,1 +1,2 @@
 - Do not use outputs but data sources where possible
+- Fix the gke module variable for networks/subnetworks
