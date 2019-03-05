@@ -19,9 +19,23 @@ resource google_compute_subnetwork kubault_poc_1 {
 resource google_compute_firewall http_inbound {
   name    = "https-inbound"
   network = "${google_compute_network.kubault_poc.self_link}"
+  source_ranges   = ["${var.inbound_cidr_allow}", "172.16.200.0/21", "172.16.208.0/21"]
 
   allow {
-    protocol  = "tcp"
-    ports     = ["80", "443"]
+    protocol        = "tcp"
+    ports           = ["443"]
   }
 }
+
+/*
+resource google_compute_firewall ssh_inbound {
+  name    = "ssh-inbound"
+  network = "${google_compute_network.kubault_poc.self_link}"
+  source_ranges = ["${var.inbound_cidr_allow}"]
+
+  allow {
+    protocol      = "tcp"
+    ports         = ["22"]
+  }
+}
+*/
