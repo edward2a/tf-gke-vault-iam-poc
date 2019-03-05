@@ -1,5 +1,5 @@
 data terraform_remote_state gcp {
-  backend = "local" 
+  backend = "local"
   config = {
     path = "${path.module}/../terraform.tfstate"
   }
