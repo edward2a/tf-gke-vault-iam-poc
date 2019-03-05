@@ -16,3 +16,9 @@ ssh_key/*
 
 # vim
 *.swp
+
+# runtime data
+certs/
+crypt_curl.log
+vault_sa_key.json.encrypted.base64
+vault_sa_key.json.encrypted.base64.sig
