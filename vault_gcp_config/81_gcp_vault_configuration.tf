@@ -44,6 +44,14 @@ resource google_project_iam_member vault_secret_account_admin_tokens {
 resource vault_gcp_secret_backend gcp {
   credentials = "${base64decode(google_service_account_key.vault_secret.private_key)}"
 }
+
+# Wait resource to make sure gcp secret backend is ready
+resource null_resource gcp_init_wait {
+  depends_on = ["vault_gcp_secret_backend.gcp"]
+  provisioner "local-exec" {
+    command = "sleep 60s"
+  }
+}
 #### GCP SECRET BACKEND CONFIG - END ####
 
 #### SAMPLE APPS CONFIG ####
@@ -59,6 +67,7 @@ resource google_service_account sample_app_2 {
 */
 
 resource vault_generic_secret sample_app_1_roleset {
+  depends_on  = ["vault_gcp_secret_backend.gcp", "null_resource.gcp_init_wait"]
   path = "gcp/roleset/sample-app-1"
   data_json = <<EOT
 {
@@ -71,6 +80,7 @@ EOT
 }
 
 resource vault_generic_secret sample_app_2_roleset {
+  depends_on  = ["vault_gcp_secret_backend.gcp", "null_resource.gcp_init_wait"]
   path = "gcp/roleset/sample-app-2"
   data_json = <<EOT
 {
