@@ -39,15 +39,15 @@ resource kubernetes_cluster_role_binding vault {
     name      = "vault-tokenreview-binding"
   }
   role_ref {
-    name      = "system-auth:delegator"
-    kind      = "ClusterRole"
     api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "system:auth-delegator"
   }
   subject {
-    name      = "${kubernetes_service_account.vault.metadata.0.name}"
-    kind      = "ServiceAccount"
-    namespace = "default"
     api_group = ""
+    kind      = "ServiceAccount"
+    name      = "${kubernetes_service_account.vault.metadata.0.name}"
+    namespace = "default"
   }
 }
 #### K8S CONFIG FOR VAULT - END ####
